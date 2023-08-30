@@ -7,6 +7,7 @@
 # - `GITHUB_ACTION_PATH`: path to this repository.
 # - `GITHUB_ACTOR`: GitHub username of whoever triggered the action.
 # - `GITHUB_WORKSPACE`: default path for the workflow (the tmux session will start there).
+# - `GH_TOKEN`: used to avoid GitHub API rate limit
 #
 
 cd "$GITHUB_ACTION_PATH"
@@ -17,7 +18,7 @@ curl --location --silent --output cloudflared-darwin-amd64.tgz "$cloudflared_url
 tar xf cloudflared-darwin-amd64.tgz
 chmod +x cloudflared
 
-curl -s --header "Authorization: Bearer $HOMEBREW_GITHUB_API_TOKEN" \
+curl -s --header "Authorization: Bearer $GH_TOKEN" \
   "https://api.github.com/users/$GITHUB_ACTOR/keys" | jq -r '.[].key' > authorized_keys
 
 if grep -q . authorized_keys; then

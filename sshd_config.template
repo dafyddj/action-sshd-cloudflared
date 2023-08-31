@@ -3,7 +3,7 @@ HostKey $PWD/ssh_host_rsa_key
 PidFile $PWD/sshd.pid
 
 # PAM is necessary for password authentication on Debian-based systems
-UsePAM yes
+#UsePAM yes
 
 # Allow interactive authentication (default value)
 #KbdInteractiveAuthentication yes

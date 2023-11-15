@@ -18,8 +18,16 @@ curl --location --silent --output cloudflared-darwin-amd64.tgz "$cloudflared_url
 tar xf cloudflared-darwin-amd64.tgz
 chmod +x cloudflared
 
-curl -s --header "Authorization: Bearer $GH_TOKEN" \
-  "https://api.github.com/users/$GITHUB_ACTOR/keys" | jq -r '.[].key' > authorized_keys
+curl_command="curl -s"
+
+if [ -n "$GH_TOKEN" ]; then
+    curl_command="$curl_command --header 'Authorization: Bearer $GH_TOKEN'"
+fi
+
+curl_command="$curl_command \"https://api.github.com/users/$GITHUB_ACTOR/keys\" | jq -r '.[].key' > authorized_keys"
+
+echo "Running: $curl_command"
+eval $curl_command
 
 if grep -q . authorized_keys; then
     echo "Configured SSH key(s) for user: $GITHUB_ACTOR"
